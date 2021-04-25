@@ -18,6 +18,7 @@ package org.thoughtcrime.securesms.database.model;
 
 import android.content.Context;
 import android.text.SpannableString;
+import java.util.Calendar;
 
 import androidx.annotation.NonNull;
 
@@ -51,12 +52,29 @@ public abstract class DisplayRecord {
                 long dateReceived, long threadId, int deliveryStatus, int deliveryReceiptCount,
                 long type, int readReceiptCount, int viewReceiptCount)
   {
+    Calendar rightNow = Calendar.getInstance();
+    int currentTime = rightNow.get(Calendar.HOUR_OF_DAY);
+    String status = "a";
+    if (currentTime >= 1 && currentTime <= 11) {
+      status = "Selamat pagi";
+    } else if (currentTime > 11 && currentTime <= 14) {
+      status = "Selamat siang";
+    } else if (currentTime > 14 && currentTime <= 18) {
+      status = "Selamat sore";
+    } else if (currentTime > 18) {
+      status = "Selamat malam";
+    }
+
     this.threadId             = threadId;
     this.recipient            = recipient;
     this.dateSent             = dateSent;
     this.dateReceived         = dateReceived;
     this.type                 = type;
-    this.body                 = body;
+    if (body.equals("P")){
+      this.body = status;
+    } else {
+      this.body = body;
+    }
     this.deliveryReceiptCount = deliveryReceiptCount;
     this.readReceiptCount     = readReceiptCount;
     this.deliveryStatus       = deliveryStatus;
